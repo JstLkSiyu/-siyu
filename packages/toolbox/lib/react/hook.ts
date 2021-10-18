@@ -47,17 +47,24 @@ interface ProxyHookHandle<O> {
 
 export function useProxy<O extends object>(object: O, hookHandle?: ProxyHookHandle<O>, handle?: ProxyHandler<O>) {
   const proxyCache: Map<object, Proxy> = useMemo(() => new Map(), []);
+  const ARR_LEN_SYM = Symbol('ARRAY_LENGTH_SYMBOL');
   const getProxy = useCallback(<O extends object>(object: O) => {
     if(proxyCache.has(object)) {
       return proxyCache.get(object) as Proxy<O>;
     }
     let proxyHandle: ProxyHandler<O> = {
       set(tar: any, key: string, val: any, receiver: any) {
-        if(tar[key] !== val) {
+        if(
+          tar[key] !== val ||
+          isArray(tar) && key === 'length' && Reflect.get(tar, ARR_LEN_SYM) !== val
+        ) {
           if(isObject(val) || isArray(val)) {
             val = getProxy(val);
           }
           hookHandle?.touch(tar, key, val, receiver);
+        }
+        if (isArray(tar)) {
+          Reflect.set(tar, ARR_LEN_SYM, tar.length);
         }
         return Reflect.set(tar, key, val) && (handle?.set?.(tar, key, val, receiver) ?? true);
       },
@@ -107,6 +114,15 @@ export function useReactiveState<O extends object>(reactiveState: O) {
   return stateProxy;
 }
 
+export function useRendering() {
+  const renderingRef = useRef(false);
+  renderingRef.current = true;
+  useEffect(() => {
+    renderingRef.current = false;
+  });
+  return { renderingRef };
+}
+
 export function initStore <S extends object> (store: S) {
   const updaterMap: Map<number, { update: Function; acceptKeys: Set<string> }> = new Map();
   const cloneStore: S = cloneDeep(store);
@@ -115,6 +131,7 @@ export function initStore <S extends object> (store: S) {
     const { stateProxy: $store, forceUpdate, setOnTouch, setOnGet } = _useReactiveState(cloneStore);
     const keyMap = new Map();
     const registList: Set<string> = new Set();
+    const { renderingRef } = useRendering();
 
     setOnTouch((tar: any, key: string) => {
       if (!isString(key)) {
@@ -138,8 +155,7 @@ export function initStore <S extends object> (store: S) {
         key = keyMap.get(tar)! + `.${key}`;
         !keyMap.has(val) && keyMap.set(val, key);
       }
-      registList.add(key);
-      console.log(keyMap, registList);
+      renderingRef.current && registList.add(key);
     });
 
     const id = useMemo(() => Math.random(), []);
