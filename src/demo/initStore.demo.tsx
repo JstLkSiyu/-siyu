@@ -1,5 +1,5 @@
 import { initStore } from '@toolbox/react/hook';
-import { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { useRenderCount } from '../utils/hooks';
 
 const childrenStore = {
@@ -32,6 +32,31 @@ const calcStore = {
 const useChilrenStore = initStore(childrenStore);
 const useBookStore = initStore(bookStore);
 const useCalcStore = initStore(calcStore);
+
+function increaseBooksSale() {
+  const $bookStore = useBookStore.current;
+  $bookStore?.forEach(book => book.sale = book.sale * 1.1);
+}
+
+const BookStore: FC<any> = props => {
+  const { store: bookStore } = useBookStore();
+  return (
+    <div>
+      {bookStore.map((book, index) => (
+        <div key={book.name + index}>
+          <p>
+            <b>Name: </b>
+            <span>{book.name}</span>
+          </p>
+          <p>
+            <b>Price: </b>
+            <span>{book.sale}</span>
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const Demo = function () {
   const { store: childrenStore } = useChilrenStore();
@@ -84,22 +109,13 @@ const Demo = function () {
             // children[1] = child;
           }}>add a child</button>
         </div>
-        {bookStore.map((book, index) => (
-          <div key={book.name + index}>
-            <p>
-              <b>Name: </b>
-              <span>{book.name}</span>
-            </p>
-            <p>
-              <b>Price: </b>
-              <span>{book.sale}</span>
-            </p>
-          </div>
-        ))}
+        <BookStore />
+        <BookStore />
         <div>
           <button onClick={() => {
             bookStore.forEach(book => book.sale = book.sale * 1.1);
           }}>increase 10% sale price</button>
+          <button onClick={() => increaseBooksSale()}>increase 10% sale price by global</button>
         </div>
         <div>
           <p>

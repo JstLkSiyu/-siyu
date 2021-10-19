@@ -4,7 +4,7 @@ import InitStoreDemo2 from './demo/initStore.demo2';
 function App() {
   return (
     <div>
-      {/* <InitStoreDemo /> */}
+      <InitStoreDemo />
       <InitStoreDemo2 />
     </div>
   )

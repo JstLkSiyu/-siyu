@@ -127,8 +127,11 @@ export function initStore <S extends object> (store: S) {
   const updaterMap: Map<number, { update: Function; acceptKeys: Set<string> }> = new Map();
   const cloneStore: S = cloneDeep(store);
 
-  return function useStore() {
+  type UseStore = (() => { store: S }) & { current?: S };
+
+  const useStore: UseStore = function useStore() {
     const { stateProxy: $store, forceUpdate, setOnTouch, setOnGet } = _useReactiveState(cloneStore);
+    Reflect.set(useStore, 'current', $store);
     const keyMap = new Map();
     const registList: Set<string> = new Set();
     const { renderingRef } = useRendering();
@@ -172,6 +175,8 @@ export function initStore <S extends object> (store: S) {
       store: $store
     }
   }
+
+  return useStore;
 }
 
 export function useLocalStorage() {
