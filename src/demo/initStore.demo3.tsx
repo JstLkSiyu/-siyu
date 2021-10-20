@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { initStore } from '@toolbox/react/hook';
+import { useRenderCount } from '../utils/hooks';
 
 const store = {
   obj1: {
@@ -21,8 +22,13 @@ const useStore = initStore(store);
 const Demo: FC<any> = props => {
   const { store } = useStore();
   const { arr, obj1, obj2, obj } = store;
+  const { CountHtml } = useRenderCount();
   return (
     <div>
+      <div>
+        <h1>Demo3 for initStore(store: object)</h1>
+        <CountHtml />
+      </div>
       <div>
         <h3>{obj1.name}</h3>
         <b>{obj1.age} years</b>

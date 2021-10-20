@@ -45,10 +45,12 @@ interface ProxyHookHandle<O> {
   touch: (tar: O, key: string, val: any, receiver: any) => void;
 }
 
+const IS_PROXY_SYM = Symbol('IS_PROXY_SYMBOL');
+const PROXY_TAR_SYM = Symbol('PROXY_TAR_SYMBOL');
+const ARR_LEN_SYM = Symbol('ARRAY_LENGTH_SYMBOL');
+
 export function useProxy<O extends object>(object: O, hookHandle?: ProxyHookHandle<O>, handle?: ProxyHandler<O>) {
   const proxyCache: Map<object, Proxy> = useMemo(() => new Map(), []);
-  const ARR_LEN_SYM = Symbol('ARRAY_LENGTH_SYMBOL');
-  const IS_PROXY_SYM = Symbol('IS_PROXY_SYMBOL');
   const isProxy = useCallback(<O extends object>(object: O) => {
     return Boolean(Reflect.get(object, IS_PROXY_SYM));
   }, []);
@@ -56,8 +58,12 @@ export function useProxy<O extends object>(object: O, hookHandle?: ProxyHookHand
     if(proxyCache.has(object)) {
       return proxyCache.get(object) as Proxy<O>;
     }
-    if (isProxy(object) && new Set(proxyCache.values()).has(object)) {
-      return object;
+    if (isProxy(object)) {
+      if (new Set(proxyCache.values()).has(object)) {
+        return object;
+      } else {
+        return Reflect.get(object, PROXY_TAR_SYM);
+      }
     }
     let proxyHandle: ProxyHandler<O> = {
       set(tar: any, key: string, val: any, receiver: any) {
@@ -78,6 +84,8 @@ export function useProxy<O extends object>(object: O, hookHandle?: ProxyHookHand
       get(tar: any, key: string | symbol, receiver: any) {
         if (key === IS_PROXY_SYM) {
           return true;
+        } else if (key === PROXY_TAR_SYM) {
+          return tar;
         }
         let val = handle?.get?.(tar, key, receiver) ?? tar[key];
         if(isObject(val) || isArray(val)) {
