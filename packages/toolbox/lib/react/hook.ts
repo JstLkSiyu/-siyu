@@ -124,7 +124,7 @@ export function useRendering() {
 }
 
 export function initStore <S extends object> (store: S) {
-  const updaterMap: Map<number, { update: Function; acceptKeys: Set<string> }> = new Map();
+  const updaterMap: Map<symbol, { update: Function; acceptKeys: Set<string> }> = new Map();
   const cloneStore: S = cloneDeep(store);
 
   type UseStore = (() => { store: S }) & { current?: S };
@@ -140,7 +140,8 @@ export function initStore <S extends object> (store: S) {
       if (!isString(key)) {
         return;
       }
-      const touchKey = keyMap.get(tar) + `.${key}`;
+      const touchPrefix = keyMap.get(tar);
+      const touchKey =  touchPrefix ? `${touchPrefix}.${key}` : key;
       updaterMap.forEach(updater => {
         if (updater.acceptKeys.has(touchKey)) {
           updater.update();
@@ -152,16 +153,15 @@ export function initStore <S extends object> (store: S) {
         return tar[key];
       }
       const val = tar[key];
-      if (!keyMap.has(tar)) {
-        keyMap.set(val, key);
-      } else {
-        key = keyMap.get(tar)! + `.${key}`;
-        !keyMap.has(val) && keyMap.set(val, key);
+      const keyPrefix = keyMap.get(tar);
+      if (keyPrefix) {
+        key = `${keyPrefix}.${key}`;
       }
+      !keyMap.has(val) && keyMap.set(val, key);
       renderingRef.current && registList.add(key);
     });
 
-    const id = useMemo(() => Math.random(), []);
+    const id = useMemo(() => Symbol(), []);
     useEffect(() => {
       updaterMap.set(id, {
         update: forceUpdate,
