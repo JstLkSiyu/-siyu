@@ -52,6 +52,9 @@ export function useProxy<O extends object>(object: O, hookHandle?: ProxyHookHand
     if(proxyCache.has(object)) {
       return proxyCache.get(object) as Proxy<O>;
     }
+    if (new Set(proxyCache.values()).has(object)) {
+      return object;
+    }
     let proxyHandle: ProxyHandler<O> = {
       set(tar: any, key: string, val: any, receiver: any) {
         if(
