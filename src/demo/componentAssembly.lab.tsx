@@ -43,7 +43,7 @@ const addNumber = function (ctx: any) {
 }
 
 const Component1: FC<any> = props => {
-  const { name, tasks } = props;
+  const { name, tasks = [] } = props;
   const { store, dispatch } = useComponentAssembly(name, tasks, { number: 0 });
   return (
     <div>
