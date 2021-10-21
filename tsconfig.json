@@ -18,7 +18,7 @@
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
-      "@toolbox/*": ["./packages/toolbox/lib/*"]
+      "@toolbox*": ["./packages/toolbox/lib*"]
     },
     "types": ["node"]
   },
