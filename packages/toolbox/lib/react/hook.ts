@@ -32,7 +32,12 @@ export function useDidUpdate(callback: Function) {
 }
 
 export function useWillUpdate(callback: Function) {
-  callback();
+  const ref = useRef(true);
+  if (ref.current) {
+    ref.current = false;
+  } else {
+    callback();
+  }
 }
 
 export function useForceUpdate() {
@@ -229,10 +234,10 @@ export function useDebounce(callback: () => void, timeout: number = 200) {
   }, []);
   const timeoutRef = useRef(0);
   clearTimeout(timeoutRef.current);
-  timeoutRef.current = setTimeout(() => execCallback, timeout);
+  timeoutRef.current = setTimeout(() => execCallback(), timeout);
 }
 
-export function useTrottle(callback: () => void, timeout: number = 200) {
+export function useThrottle(callback: () => void, timeout: number = 200) {
   const canExec = useRef(true);
   const execCallback = useCallback(() => {
     callback();

@@ -5,6 +5,8 @@ import InitStoreDemo4 from './demo/initStore.demo4';
 import InitStoreDemo5 from './demo/initStore.demo5';
 import Lab from './demo/lab';
 import ComponentAssemblyLab from './demo/componentAssembly.lab';
+import UseThrottleDemo from './demo/useThrottle.demo';
+import UseDebounceDemo from './demo/useDebounce.demo';
 
 function App() {
   return (
@@ -15,7 +17,9 @@ function App() {
       {/* <InitStoreDemo3 /> */}
       {/* <InitStoreDemo4 /> */}
       {/* <InitStoreDemo5 /> */}
-      <ComponentAssemblyLab />
+      {/* <ComponentAssemblyLab /> */}
+      {/* <UseThrottleDemo /> */}
+      <UseDebounceDemo />
     </div>
   )
 }

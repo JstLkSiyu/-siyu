@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useMemo } from 'react';
-import { initStore } from '@toolbox/react/hook';
+import { initStore, useWillMount, useWillUnmount } from '@toolbox/react/hook';
 
-const storeMap: any = {};
+const storeMap: Map<string, ReturnType<typeof initStore>> = new Map();
 
 type Task = Array<{
   component: string;
@@ -10,15 +10,13 @@ type Task = Array<{
 
 // 组件联动hooks
 const useComponentAssembly = function <C extends object> (name: string, tasks: Task[], context: C) {
-  useEffect(() => {
-    return () => {
-      delete storeMap[name];
-    }
-  }, []);
-  useMemo(() => {
-    storeMap[name] = initStore(context);
-  }, []);
-  const useStore = storeMap[name];
+  useWillMount(() => {
+    storeMap.set(name, initStore(context));
+  });
+  useWillUnmount(() => {
+    storeMap.delete(name);
+  });
+  const useStore = storeMap.get(name)!;
   const { store } = useStore();
   const dispatch = useCallback((taskName: string) => {
     for (const _taskName in tasks) {
@@ -26,7 +24,7 @@ const useComponentAssembly = function <C extends object> (name: string, tasks: T
         const task = tasks[_taskName];
         task.forEach(target => {
           const { component, action } = target;
-          action(storeMap[component]?.current);
+          action(storeMap.get(component)?.current);
         });
       }
     }

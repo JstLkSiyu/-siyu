@@ -1,6 +1,6 @@
 import { initStore } from '@toolbox/react/hook';
 import { FC, useEffect, useRef } from 'react';
-import { useRenderCount } from '../utils/hooks';
+import { useRenderCount, useTitle } from '../utils/hooks';
 
 const childrenStore = {
   children: [
@@ -63,13 +63,14 @@ const Demo = function () {
   const { store: bookStore } = useBookStore();
   const { store: calcStore } = useCalcStore();
   const { CountHtml } = useRenderCount();
+  const { TitleHtml } = useTitle('Demo for initStore(store: object)');
 
   const { children } = childrenStore;
 
   return (
     <div>
       <div>
-        <h1>Demo for initStore(store: object)</h1>
+        <TitleHtml />
         <CountHtml />
       </div>
       <div>

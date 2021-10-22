@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { initStore } from '@toolbox/react/hook';
-import { useRenderCount } from '../utils/hooks';
+import { useRenderCount, useTitle } from '../utils/hooks';
 
 const parentStore = {
   string: 'string',
@@ -46,8 +46,14 @@ const Child: FC<any> = props => {
 }
 
 const Demo: FC = props => {
+  const { TitleHtml } = useTitle('Demo2 for initStore(store: object)');
+  const { CountHtml } = useRenderCount();
   return (
     <div>
+      <div>
+        <TitleHtml />
+        <CountHtml />
+      </div>
       <div>
         <h1>Demo2 for initStore(store: object)</h1>
       </div>

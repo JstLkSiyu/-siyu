@@ -25,3 +25,20 @@ export function useRenderCount() {
   }
   return { CountHtml };
 }
+
+export function useTitle(title: string) {
+  const TitleHtml = () => {
+    return useMemo(() => React.createElement(
+      'div',
+      {},
+      [
+        React.createElement(
+          'h1',
+          { key: 'h1' },
+          title
+        )
+      ]
+    ), [title]);
+  }
+  return { TitleHtml };
+}

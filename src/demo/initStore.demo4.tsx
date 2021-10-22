@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { initStore } from '@toolbox/react/hook';
-import { useRenderCount } from '../utils/hooks';
+import { useRenderCount, useTitle } from '../utils/hooks';
 
 const store1 = {
   obj: {
@@ -55,10 +55,11 @@ const Component2: FC = props => {
 
 const Demo: FC<any> = props => {
   const { CountHtml } = useRenderCount();
+  const { TitleHtml } = useTitle('Demo4 for initStore(store: object)');
   return (
     <div>
       <div>
-        <h1>Demo4 for initStore(store: object)</h1>
+        <TitleHtml />
         <CountHtml />
       </div>
       <Component1 />

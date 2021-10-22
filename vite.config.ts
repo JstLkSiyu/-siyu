@@ -12,8 +12,8 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: /@toolbox\/(.*)/,
-        replacement: path.resolve(__dirname, 'packages/toolbox/lib/$1')
+        find: /@toolbox(.*)/,
+        replacement: path.resolve(__dirname, 'packages/toolbox/lib$1')
       }
     ]
   },

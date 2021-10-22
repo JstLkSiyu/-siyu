@@ -1,5 +1,6 @@
 import { initStore  } from '@toolbox/react/hook';
 import { FC } from 'react';
+import { useRenderCount, useTitle } from '../utils/hooks';
 
 const store = {
   obj: {
@@ -17,8 +18,14 @@ const useStore = initStore(store);
 const Demo: FC = props => {
   const { store } = useStore();
   const { obj, obj1 } = store;
+  const { TitleHtml } = useTitle('Demo5 for initStore(store: object)');
+  const { CountHtml } = useRenderCount();
   return (
     <div>
+      <div>
+        <TitleHtml />
+        <CountHtml />
+      </div>
       <div style={{ color: 'red' }}>
         <h3>{obj.name}</h3>
         <h3>{obj.obj1?.name}</h3>
