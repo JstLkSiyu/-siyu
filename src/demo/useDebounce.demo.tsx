@@ -17,6 +17,7 @@ const Demo: FC = props => {
         <b>debounce count: {debounceCount.current}</b>
       </div>
       <button onClick={() => {
+        clearInterval(intervalRef.current);
         intervalRef.current = setInterval(() => {
           setTick(tick => tick + 1);
         }, 200);

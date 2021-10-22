@@ -17,6 +17,7 @@ const Demo: FC = props => {
         <b>throttle count: {throttleCount.current}</b>
       </div>
       <button onClick={() => {
+        clearInterval(intervalRef.current);
         intervalRef.current = setInterval(() => {
           setTick(tick => tick + 1);
         }, 200);
