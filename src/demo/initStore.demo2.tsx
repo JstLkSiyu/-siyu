@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { initStore } from '@toolbox/react/hook';
 import { useRenderCount, useTitle } from '../utils/hooks';
 

@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import { initStore, useWillMount, useWillUnmount } from '@toolbox/react/hook';
 
 const storeMap: Map<string, ReturnType<typeof initStore>> = new Map();

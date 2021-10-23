@@ -7,6 +7,8 @@ import Lab from './demo/lab';
 import ComponentAssemblyLab from './demo/componentAssembly.lab';
 import UseThrottleDemo from './demo/useThrottle.demo';
 import UseDebounceDemo from './demo/useDebounce.demo';
+import UnsafeHookLab from './demo/unsafeHooks.lab';
+import React from 'react';
 
 function App() {
   return (
@@ -19,7 +21,8 @@ function App() {
       {/* <InitStoreDemo5 /> */}
       {/* <ComponentAssemblyLab /> */}
       {/* <UseThrottleDemo /> */}
-      <UseDebounceDemo />
+      {/* <UseDebounceDemo /> */}
+      <UnsafeHookLab />
     </div>
   )
 }

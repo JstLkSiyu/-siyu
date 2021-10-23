@@ -2,7 +2,7 @@ import { useEffect, useCallback, useMemo, useRef } from 'react';
 import { cloneDeep } from 'lodash';
 import { useRendering, useForceUpdate } from './hook';
 import { isString, isArray, isObject } from '../base/Check';
-import type { Proxy } from '@/types/ToolType';
+import type { Proxy } from '../types/ToolType';
 
 interface ProxyHookHandle<O> {
   touch: (tar: O, key: string, val: any, receiver: any) => void;

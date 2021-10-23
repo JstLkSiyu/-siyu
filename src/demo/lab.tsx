@@ -1,5 +1,5 @@
 import { useForceUpdate } from '@toolbox/react/hook';
-import { Component, FC, useEffect } from 'react';
+import React, { Component, FC, useEffect } from 'react';
 
 const Parent: FC = props => {
   useEffect(() => {

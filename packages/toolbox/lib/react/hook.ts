@@ -84,7 +84,7 @@ export function useDebounce(callback: () => void, timeout: number = 200) {
     callback();
     clearTimeout(timeoutRef.current);
   }, []);
-  const timeoutRef = useRef(0);
+  const timeoutRef = useRef<any>(0);
   clearTimeout(timeoutRef.current);
   timeoutRef.current = setTimeout(() => execCallback(), timeout);
 }

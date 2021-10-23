@@ -1,5 +1,5 @@
 import { initStore  } from '@toolbox/react/hook';
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { useRenderCount, useTitle } from '../utils/hooks';
 
 const store = {
