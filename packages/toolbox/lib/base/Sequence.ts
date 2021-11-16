@@ -24,15 +24,15 @@ export function createSeqCtx() {
     }
     return callback.call(null, result);
   }
-  function getSeqElemByTag(tag: number): SeqElem {
-    return map.get(tag) ?? { callback: new Function(), result: undefined };
+  function getSeqElemByTag(tag: number): SeqElem | undefined {
+    return map.get(tag);
   }
   /**
    * execute all callback function by sequence until callback does not exist in map
    */
   function clearWaiting() {
     while(curr <= last) {
-      let { callback, result } = getSeqElemByTag(curr);
+      let { callback, result } = getSeqElemByTag(curr) ?? {};
       if(callback) {
         deleteTagFromMap(curr);
         execCallback(callback, result);
